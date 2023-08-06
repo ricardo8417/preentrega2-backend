@@ -48,16 +48,41 @@ router.get('/delete/:pid',async(req,res)=>{
 
 
 router.get('/',async(req,res)=>{
+  // const limit = req.query.limit;
+
   try{
     const products= await productModel.find()
-    res.send(products)
+// if (limit !== undefined) {
+//   const parsedLimit = parseInt(limit);
+//   if (!isNaN(parsedLimit)) {
+//     if (parsedLimit <= products.length) {
+//       return res.status(200).send(products.slice(0, parsedLimit));
+//     }
+//     return res.send("La cantidad de productos es: " + products.length);
+//   }
+// }
+// return
+ res.send(products)
   }catch(e){
     res.send(e)
   }
  
 })
 
-
+router.get("/:_id", async (req, res) => {
+  const pid = req.params._id
+  if (pid > 0) {
+    try {
+      const product = await productModel.findById(pid).lean().exec();
+      if (!product) return res.send("el porducto de id " + pid + " no existe");
+      return res.send(product);
+    } catch (error) {
+      res.status(500).send("Error al obtener los productos");
+    }
+  } else {
+    res.send("el id del producto no puede ser menos que o igual que 0");
+  }
+});
 
 // router.get("/", async (req, res) => {
 //   const limit = parseInt(req.query.limit);

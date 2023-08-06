@@ -1,6 +1,6 @@
 // agregar productos al carrito
 const addCart = (id) => {
-  const cid = "64c2f98bc34641fcca5a229b";
+  const cid = "64cc88ad1cc7179550403154";
   const pid = id;
   const requestOptions = {
     method: "POST",
@@ -22,7 +22,7 @@ const addCart = (id) => {
 
 //eliminar productos del carrito
 const deleteProduct = (id) => {
-  const cid = "64c2f98bc34641fcca5a229b";
+  const cid = "64cc88ad1cc7179550403154";
   const pid = id;
   const requestOptions = {
     method: "DELETE",
@@ -54,6 +54,7 @@ fetch("/cart/count")
     console.log(
       (document.getElementById("countCart").textContent = data.count)
     );
+    
   })
   .catch((error) => {
     console.error(

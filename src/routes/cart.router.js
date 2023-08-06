@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import CartModel from "../Dao/models/Cart.models.js";
-// import productsModel from "../Dao/models/products.models.js";
+import productsModel from "../Dao/models/Product.models.js";
 // import CartManager from "../manager/CartManager.js";
 // import ProductManager from "../manager/ProductManager.js";
 
@@ -41,7 +41,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
   const quantity = parseInt(req.body.quantity || 1);
   try {
     let cart = await CartModel.findById(cid);
-    let productos = await productsModel.findById(pid);
+    let productos = await productsModel.findById({_id:pid});
 
     if (!cart) {
       cart = new CartModel({ products: { pid, quantity } });

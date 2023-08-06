@@ -36,3 +36,22 @@ color: white;
 .filter{
   height: 30px;
 }
+
+
+.card__container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.card{
+  margin: 16px;
+}
+
+
+
+.contenedor .m-3 .bi-cart3, .contenedor .m-3 .count{
+  color: white;
+
+}
