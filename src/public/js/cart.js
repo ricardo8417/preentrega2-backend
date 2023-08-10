@@ -54,7 +54,6 @@ fetch("/cart/count")
     console.log(
       (document.getElementById("countCart").textContent = data.count)
     );
-    
   })
   .catch((error) => {
     console.error(

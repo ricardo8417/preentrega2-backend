@@ -4,8 +4,8 @@
     <div id="logs">
         {{#each messages}}
         {{#each this.message}}
-        <p class="text-light">{{../user}}</p>
-        <p class="text-light"> {{this}}</p>
+        <p class="text-light">{{this.user}}</p>
+        <p class="text-light"> {{this.message}}</p>
         {{/each}}
         {{/each}}
     </div>

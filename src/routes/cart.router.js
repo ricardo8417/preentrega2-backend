@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import CartModel from "../Dao/models/Cart.models.js";
 import productsModel from "../Dao/models/Product.models.js";
+import cartModel from "../Dao/models/Cart.models.js";
 // import CartManager from "../manager/CartManager.js";
 // import ProductManager from "../manager/ProductManager.js";
 
@@ -23,9 +24,9 @@ router.get("/:cid", async (req, res) => {
   }
 });
 
+//se crea un carrito con un arreglo vacio del producto
 router.post("/", async (req, res) => {
   try {
-    
     new CartModel({ products: [] }).save();
     res.send("se ah creado el carrito");
   } catch (e) {
@@ -34,14 +35,14 @@ router.post("/", async (req, res) => {
 });
 
 
-
+//Agrega un producto dentro del carrito.
 router.post("/:cid/product/:pid", async (req, res) => {
   const cid = req.params.cid;
   const pid = req.params.pid;
   const quantity = parseInt(req.body.quantity || 1);
   try {
     let cart = await CartModel.findById(cid);
-    let productos = await productsModel.findById({_id:pid});
+    let productos = await productsModel.findById({ _id: pid });
 
     if (!cart) {
       cart = new CartModel({ products: { pid, quantity } });
@@ -71,7 +72,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
   }
 });
 
-
+//Eliminar Todos los productos dentro del carrito
 router.delete("/:cid", async (req, res) => {
   const cid = req.params.cid;
 
@@ -89,7 +90,7 @@ router.delete("/:cid", async (req, res) => {
   }
 });
 
-
+//Actualizar Cantidad del producto dentro del carrito
 router.put("/:cid/products/:pid", async (req, res) => {
   const { cid, pid } = req.params;
   const quantity = req.body.quantity || 1;
@@ -109,6 +110,27 @@ router.put("/:cid/products/:pid", async (req, res) => {
     res.status(404).send({ error: "Ha ocurrido un error", message: e.message });
   }
 });
+
+
+//Eliminar un producto dentro del carrito.
+router.delete("/:cid/product/:pid", async (req, res) => {
+  const cid = req.params.cid;
+  const pid = req.params.pid;
+
+  try {
+    const deletecart = await cartModel.findByIdAndUpdate(
+      { _id: cid },
+      {
+        $pull: { products: { _id: pid } },
+      },
+      { new: true }
+    );
+
+    res.send(deletecart);
+  } catch (e) {
+    res.send(e);
+  }
+});
 // const cartManager = new CartManager("./dataBase/dataCart.json");
 // const producto = new ProductManager("./dataBase/productos.json")
 
@@ -121,8 +143,6 @@ router.put("/:cid/products/:pid", async (req, res) => {
 //     res.send(e);
 //   }
 // });
-
-
 
 // router.post("/", async (req, res) => {
 //   try {
@@ -149,15 +169,13 @@ router.put("/:cid/products/:pid", async (req, res) => {
 //     const pid= Number(req.params.pid)
 //     console.log(await producto.getProductById(pid))
 
- 
 //   const addProduct = await cartManager.updateCart(cid, pid, 1);
-  
+
 //   res.status(200).json(addProduct)
 
 //   }catch(e){
 //  res.status(400).json({ error400: "Bad Request" });
 //   }
-
 
 // });
 export default router;
